@@ -20,9 +20,6 @@ import java.util.List;
 import VideoHandle.EpEditor;
 import VideoHandle.EpVideo;
 import VideoHandle.OnEditorListener;
-import io.microshow.rxffmpeg.RxFFmpegCommandSupport;
-import io.microshow.rxffmpeg.RxFFmpegInvoke;
-import io.microshow.rxffmpeg.RxFFmpegSubscriber;
 
 public class MergeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -160,38 +157,5 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
-    }
-    private void mergeing(){
-        mProgressDialog.setProgress(0);
-        mProgressDialog.show();
-        final String outPath = Environment.getExternalStorageDirectory() + "/outmerge.mp4";
-        String command =/* "ffmpeg -i /storage/emulated/0/1.mp4 -i /storage/emulated/0/2.mp4 -vcodec libx264 -filter_complex \"[1:v]scale=1920x1080[v1]; [0:v][v1]overlay=x='if(gte(t,1), min(-w+(t-2)*2000, 0), NAN)':y=0[o]\" -map '[o]' -vcodec h264_videotoolbox -s 320x240 -map 1:1 -allow_sw 1 -y /storage/emulated/0/result.mp4";*/
-        //"ffmpeg -i /storage/emulated/0/1.mp4 -i /storage/emulated/0/2.mp4 -filter_complex \"blend=all_expr='A*(if(gte(T,3),1,T/3))+B*(1-(if(gte(T,3),1,T/3)))'\" /storage/emulated/0/result.mp4";// String command = "ffmpeg -y -i /storage/emulated/0/1.mp4 -vf boxblur=25:5 -preset superfast /storage/emulated/0/result.mp4";
-        "ffmpeg -i /storage/emulated/0/1.mp4 \"fade=in:5:8\" /storage/emulated/0/output.mp4";
-                String[] commands = command.split(" ");
-        RxFFmpegInvoke.getInstance().runCommandRxJava(commands).subscribe(new RxFFmpegSubscriber() {
-            @Override
-            public void onFinish() {
-                mProgressDialog.dismiss();
-            }
-//
-//回复 支持 反对举报
-            @Override
-            public void onProgress(int progress, long progressTime) {
-                mProgressDialog.setProgress(progress);
-                //progressTime 可以在结合视频总时长去计算合适的进度值
-                mProgressDialog.setMessage("已处理progressTime="+(double)progressTime/1000000+"秒");
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(String message) {
-
-            }
-        });
     }
 }

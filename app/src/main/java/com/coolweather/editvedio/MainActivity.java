@@ -44,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,MergeActivity.class));
             }
         });
-
+        findViewById(R.id.bt_cut_photo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,CutPhotoActivity.class));
+            }
+        });
+        findViewById(R.id.bt_merge_photo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,PhotoMergeActivity.class));
+            }
+        });
     }
 }

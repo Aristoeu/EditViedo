@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-       /* ndk {
+        /* ndk {
             abiFilters "armeabi-v7a","arm64-v8a"
         }*/
     }
@@ -38,6 +38,10 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
-    implementation 'com.github.microshow:RxFFmpeg:2.1.0'
-    implementation 'com.github.open-android:uCrop:v1.0.0'
+    implementation 'com.github.open-android:ImageSelector:0.1.0'
+    //  implementation 'com.zhihu.android:matisse:0.5.2-beta2'
+  //  implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+  //  implementation 'io.reactivex.rxjava2:rxjava:2.1.9'//并不知道有什么用 先拿过来
+  //  implementation 'com.github.bumptech.glide:glide:4.7.1'//并不知道有什么用 先拿过来
+  //  implementation 'com.squareup.picasso:picasso:2.5.2'//并不知道有什么用 先拿过来
 }
