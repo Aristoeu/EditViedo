@@ -1,21 +1,19 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.photo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.coolweather.editvedio.R;
 import com.scrat.app.selectorlibrary.ImageSelector;
-import static com.coolweather.editvedio.PhotoUtils.*;
+import static com.coolweather.editvedio.utils.PhotoUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +26,7 @@ public class PhotoMerge2Activity extends AppCompatActivity {
     List<Bitmap> bitmaps = new ArrayList<>();
     TextView mContentTv;
     ImageView imageView;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +43,31 @@ public class PhotoMerge2Activity extends AppCompatActivity {
         findViewById(R.id.btn_mergeX).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!bitmaps.isEmpty())
-                    imageView.setImageBitmap(drawMulti(bitmaps,true));
+                if (!bitmaps.isEmpty()) {
+                    mProgressDialog.setProgress(30);
+                    mProgressDialog.show();
+                    imageView.setImageBitmap(drawMulti(bitmaps, true));
+                    mProgressDialog.dismiss();
+                }
             }
         });
         findViewById(R.id.btn_mergeY).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!bitmaps.isEmpty())
+                if (!bitmaps.isEmpty()){
+                    mProgressDialog.setProgress(30);
+                    mProgressDialog.show();
                     imageView.setImageBitmap(drawMulti(bitmaps,false));
+                    mProgressDialog.dismiss();
+                }
             }
         });
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setMax(100);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setTitle("正在处理，请稍候");
     }
 
     @Override
@@ -75,41 +88,16 @@ public class PhotoMerge2Activity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private Bitmap drawMulti(List<Bitmap> bitmaps,boolean isX) {/*
-        int width = 0;
-        int height = 0;
-
-        //获取最大宽度
-        for (Bitmap bitmap : bitmaps) {
-            height = height + bitmap.getHeight();
-            if (width < bitmap.getWidth()) {
-                width = bitmap.getWidth();
-            }
+    private Bitmap drawMulti(List<Bitmap> bitmaps,boolean isX) {
+        if (bitmaps.size()==1)return bitmaps.get(0);
+        Bitmap res = null;
+        for (Bitmap bitmap : bitmaps){
+            if (isX)
+                res = newXBitmap(res,bitmap);
+            else res = newYBitmap(res,bitmap);
         }
-
-        Bitmap newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(newBitmap);
-        int tempHeight = 0;
-        //画图
-        for (Bitmap bitmap : bitmaps) {
-            canvas.drawBitmap(bitmap, 0, tempHeight, null);
-            tempHeight = bitmap.getHeight() + tempHeight;
-            bitmap.recycle();
-        }
-        return newBitmap;
-*/
-    if (bitmaps.size()==1)return bitmaps.get(0);
-    Bitmap res = null;
-    for (Bitmap bitmap : bitmaps){
-        if (isX)
-        res = newXBitmap(res,bitmap);
-        else res = newYBitmap(res,bitmap);
+        if (res!=null)
+            saveBitmapFile(res);
+        return res;
     }
-    if (res!=null)
-    saveBitmapFile(res);
-    return res;
-    }
-
-
-
 }

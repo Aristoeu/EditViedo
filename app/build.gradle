@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        /* ndk {
+         /*ndk {
             abiFilters "armeabi-v7a","arm64-v8a"
         }*/
     }
@@ -28,6 +28,13 @@ android {
             universalApk true
         }
     }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -40,8 +47,16 @@ dependencies {
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
     implementation 'com.github.open-android:ImageSelector:0.1.0'
     //  implementation 'com.zhihu.android:matisse:0.5.2-beta2'
-  //  implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
-  //  implementation 'io.reactivex.rxjava2:rxjava:2.1.9'//并不知道有什么用 先拿过来
-  //  implementation 'com.github.bumptech.glide:glide:4.7.1'//并不知道有什么用 先拿过来
-  //  implementation 'com.squareup.picasso:picasso:2.5.2'//并不知道有什么用 先拿过来
+    //  implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+    //  implementation 'io.reactivex.rxjava2:rxjava:2.1.9'//并不知道有什么用 先拿过来
+    //  implementation 'com.github.bumptech.glide:glide:4.7.1'//并不知道有什么用 先拿过来
+    //  implementation 'com.squareup.picasso:picasso:2.5.2'//并不知道有什么用 先拿过来
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.github.iknow4:android-utils-sdk:1.1.2'
+    implementation 'nl.bravobit:android-ffmpeg:1.1.5'
+
 }

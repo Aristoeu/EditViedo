@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

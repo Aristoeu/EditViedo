@@ -5,27 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PhotoMerge2Activity">
+    tools:context=".photo.PhotoMerge2Activity">
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/choose2photo"
-        android:text="choose photo"/>
+        android:text="选多张图片"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_mergeX"
-        android:text="merge horizontally"/>
+        android:text="水平拼接"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_mergeY"
-        android:text="merge vertically"/>
+        android:text="垂直拼接"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv"
-        android:text="here is the result."/>
+        android:text="这里是拼接的结果"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

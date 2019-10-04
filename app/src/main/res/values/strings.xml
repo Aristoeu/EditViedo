@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">EditVedio</string>
+    <string name="trimmed_done">视频剪切完成，已经存放到应用的Android->data->包名->cache文件夹中</string>
+    <string name="trimming">正在剪切视频，请稍候</string>
+    <string name="compressing">正在压缩视频，请稍候</string>
+    <string name="compressed_done">视频压缩成功</string>
+    <string name="video_shoot_tip">拖动选择你想要剪切的视频，视频时长在%d秒之内</string>
+    <string name="open_permission">开启授权</string>
+    <string name="video_record_des">为了录制视频，您需要授予拍照的权限</string>
+    <string name="recording">录制</string>
+    <string name="back">返回</string>
+    <string name="finish">完成</string>
 </resources>

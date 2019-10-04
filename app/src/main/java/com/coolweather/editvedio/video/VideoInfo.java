@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.video;
 
 
 import java.io.Serializable;

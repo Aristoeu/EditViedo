@@ -1,6 +1,7 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.video;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,7 +14,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.coolweather.editvedio.R;
+import com.coolweather.editvedio.VideoTrimmerActivity;
+import com.coolweather.editvedio.utils.UriUtils;
 
 import VideoHandle.EpEditor;
 import VideoHandle.EpVideo;
@@ -22,10 +26,10 @@ import VideoHandle.OnEditorListener;
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CHOOSE_FILE = 10;
-    private CheckBox cb_clip, cb_crop, cb_rotation, cb_mirror, cb_text;
-    private EditText et_clip_start, et_clip_end, et_crop_x, et_crop_y, et_crop_w, et_crop_h, et_rotation, et_text_x, et_text_y, et_text;
+    private CheckBox cb_clip, cb_crop, cb_rotation, cb_mirror;
+    private EditText et_clip_start, et_clip_end, et_crop_x, et_crop_y, et_crop_w, et_crop_h, et_rotation;
     private TextView tv_file;
-    private Button bt_file, bt_exec;
+    private Button bt_file, bt_exec, bt_preview;
     private String videoUrl;
     private ProgressDialog mProgressDialog;
 
@@ -37,26 +41,24 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        cb_clip = (CheckBox) findViewById(R.id.cb_clip);
-        cb_crop = (CheckBox) findViewById(R.id.cb_crop);
-        cb_rotation = (CheckBox) findViewById(R.id.cb_rotation);
-        cb_mirror = (CheckBox) findViewById(R.id.cb_mirror);
-        cb_text = (CheckBox) findViewById(R.id.cb_text);
-        et_clip_start = (EditText) findViewById(R.id.et_clip_start);
-        et_clip_end = (EditText) findViewById(R.id.et_clip_end);
-        et_crop_x = (EditText) findViewById(R.id.et_crop_x);
-        et_crop_y = (EditText) findViewById(R.id.et_crop_y);
-        et_crop_w = (EditText) findViewById(R.id.et_crop_w);
-        et_crop_h = (EditText) findViewById(R.id.et_crop_h);
-        et_rotation = (EditText) findViewById(R.id.et_rotation);
-        et_text_x = (EditText) findViewById(R.id.et_text_x);
-        et_text_y = (EditText) findViewById(R.id.et_text_y);
-        et_text = (EditText) findViewById(R.id.et_text);
-        tv_file = (TextView) findViewById(R.id.tv_file);
-        bt_file = (Button) findViewById(R.id.bt_file);
-        bt_exec = (Button) findViewById(R.id.bt_exec);
+        cb_clip =  findViewById(R.id.cb_clip);
+        cb_crop =  findViewById(R.id.cb_crop);
+        cb_rotation =  findViewById(R.id.cb_rotation);
+        cb_mirror =  findViewById(R.id.cb_mirror);
+        et_clip_start =  findViewById(R.id.et_clip_start);
+        et_clip_end =  findViewById(R.id.et_clip_end);
+        et_crop_x =  findViewById(R.id.et_crop_x);
+        et_crop_y =  findViewById(R.id.et_crop_y);
+        et_crop_w =  findViewById(R.id.et_crop_w);
+        et_crop_h =  findViewById(R.id.et_crop_h);
+        et_rotation =  findViewById(R.id.et_rotation);
+        tv_file =  findViewById(R.id.tv_file);
+        bt_file =  findViewById(R.id.bt_file);
+        bt_exec =  findViewById(R.id.bt_exec);
+        bt_preview = findViewById(R.id.bt_preview);
         bt_file.setOnClickListener(this);
         bt_exec.setOnClickListener(this);
+        bt_preview.setOnClickListener(this);
         cb_mirror.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -90,6 +92,16 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_exec:
                 execVideo();
 //				test();
+                break;
+            case R.id.bt_preview:
+              /*   Bundle bundle = new Bundle();
+                bundle.putString("video-file-path","/storage/emulated/0/download/1.mp4");
+                Intent intent = new Intent(this,VideoTrimmerActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);*/
+               if(videoUrl != null && !"".equals(videoUrl)){
+                    VideoTrimmerActivity.call(EditActivity.this,videoUrl);
+                }
                 break;
         }
     }
@@ -130,8 +142,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 epVideo.crop(Integer.parseInt(et_crop_w.getText().toString().trim()),Integer.parseInt(et_crop_h.getText().toString().trim()),Integer.parseInt(et_crop_x.getText().toString().trim()),Integer.parseInt(et_crop_y.getText().toString().trim()));
             if(cb_rotation.isChecked())
                 epVideo.rotation(Integer.parseInt(et_rotation.getText().toString().trim()),cb_mirror.isChecked());
-            if(cb_text.isChecked())
-                epVideo.addText(Integer.parseInt(et_text_x.getText().toString().trim()),Integer.parseInt(et_text_y.getText().toString().trim()),30,"red", Environment.getExternalStorageDirectory() + "/msyh.ttf",et_text.getText().toString().trim());
             mProgressDialog.setProgress(0);
             mProgressDialog.show();
             final String outPath = Environment.getExternalStorageDirectory() + "/out.mp4";

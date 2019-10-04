@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.photo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.coolweather.editvedio.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

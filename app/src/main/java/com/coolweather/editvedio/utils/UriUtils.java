@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;

@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.video;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,12 +7,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.coolweather.editvedio.R;
+import com.coolweather.editvedio.utils.StorageUtil;
+import com.coolweather.editvedio.utils.ToastUtil;
+import com.coolweather.editvedio.utils.UIThreadUtil;
+import com.coolweather.editvedio.utils.UriUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +25,9 @@ import java.util.List;
 import VideoHandle.EpEditor;
 import VideoHandle.EpVideo;
 import VideoHandle.OnEditorListener;
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
+import nl.bravobit.ffmpeg.FFcommandExecuteResponseHandler;
+import nl.bravobit.ffmpeg.FFmpeg;
 
 public class MergeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,9 +45,9 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-        tv_add = (TextView) findViewById(R.id.tv_add);
-        bt_add = (Button) findViewById(R.id.bt_add);
-        bt_merge = (Button) findViewById(R.id.bt_merge);
+        tv_add =  findViewById(R.id.tv_add);
+        bt_add = findViewById(R.id.bt_add);
+        bt_merge = findViewById(R.id.bt_merge);
         bt_glide = findViewById(R.id.bt_glide);
         videoList = new ArrayList<>();
         mProgressDialog = new ProgressDialog(this);
@@ -63,8 +71,9 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 mergeVideo();
                 break;
             case R.id.bt_glide:
-                glideMergeVideo();
+                merge2();
                 break;
+
         }
     }
 
@@ -157,5 +166,38 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
+    }
+    private void merge2(){
+        String outputFile = StorageUtil.getCacheDir() + "/trimmed.mp4" ;
+        //String command ="-i /storage/emulated/0/outmerge.mp4 \"fade=in:5:8\" "+outputFile;
+        //String command = "-ss " + "00:00:01" + " -t " + "00:00:11" + " -accurate_seek" + " -i " + "/storage/emulated/0/outmerge.mp4" + " -codec copy -avoid_negative_ts 1 " + outputFile;
+        String command = "-i /storage/emulated/0/download/3.mp4 -i /storage/emulated/0/download/5.mp4 -filter_complex \"blend=all_expr='A*(if(gte(T,3),1,T/3))+B*(1-(if(gte(T,3),1,T/3)))'\" "+outputFile;
+        String[] cmd = command.split(" ");
+        FFmpeg.getInstance(this).execute(cmd, new FFcommandExecuteResponseHandler() {
+            @Override
+            public void onSuccess(String message) {
+                UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "success", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onProgress(String message) {
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+                UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "failed", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onStart() {
+                UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "start", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onFinish() {
+                UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "finish", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 }

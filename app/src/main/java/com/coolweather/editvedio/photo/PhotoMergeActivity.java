@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.photo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -23,12 +22,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.coolweather.editvedio.R;
 
-import static com.coolweather.editvedio.PhotoUtils.*;
+import static com.coolweather.editvedio.utils.PhotoUtils.*;
 
 //不删了
 public class PhotoMergeActivity extends AppCompatActivity {
@@ -83,7 +79,7 @@ public class PhotoMergeActivity extends AppCompatActivity {
         findViewById(R.id.bt_merge_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PhotoMergeActivity.this,PhotoMerge2Activity.class));
+                startActivity(new Intent(PhotoMergeActivity.this, PhotoMerge2Activity.class));
             }
         });
     }

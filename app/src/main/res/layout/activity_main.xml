@@ -13,17 +13,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="edit"
+            android:text="编辑视频"
             android:id="@+id/bt_one"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/bt_video_list"
-            android:text="video_list"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="merge"
+            android:text="拼接视频"
             android:id="@+id/bt_more"/>
     </LinearLayout>
     <LinearLayout
