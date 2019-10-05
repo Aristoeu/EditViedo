@@ -23,6 +23,7 @@ import VideoHandle.EpEditor;
 import VideoHandle.EpVideo;
 import VideoHandle.OnEditorListener;
 
+
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CHOOSE_FILE = 10;
