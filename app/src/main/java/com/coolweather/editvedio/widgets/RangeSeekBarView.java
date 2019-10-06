@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.view.ViewConfiguration;
 
 import androidx.annotation.Nullable;
 
+import com.coolweather.editvedio.R;
 import com.coolweather.editvedio.utils.VideoTrimmerUtil;
 
 import java.text.DecimalFormat;

@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.video;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -23,10 +23,14 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coolweather.editvedio.R;
 import com.coolweather.editvedio.interfaces.IVideoTrimmerView;
 import com.coolweather.editvedio.interfaces.VideoTrimListener;
 import com.coolweather.editvedio.utils.StorageUtil;
 import com.coolweather.editvedio.utils.VideoTrimmerUtil;
+import com.coolweather.editvedio.widgets.RangeSeekBarView;
+import com.coolweather.editvedio.widgets.SpacesItemDecoration;
+import com.coolweather.editvedio.widgets.ZVideoView;
 
 import iknow.android.utils.BaseUtils;
 import iknow.android.utils.callback.SingleCallback;
@@ -109,7 +113,7 @@ public class VideoTrimmerView extends FrameLayout implements IVideoTrimmerView {
             rangeWidth = mMaxWidth / VideoTrimmerUtil.MAX_COUNT_RANGE * mThumbsTotalCount;
             mRightProgressPos = VideoTrimmerUtil.MAX_SHOOT_DURATION;
         }
-        mVideoThumbRecyclerView.addItemDecoration(new SpacesItemDecoration2(VideoTrimmerUtil.RECYCLER_VIEW_PADDING, mThumbsTotalCount));
+        mVideoThumbRecyclerView.addItemDecoration(new SpacesItemDecoration(VideoTrimmerUtil.RECYCLER_VIEW_PADDING, mThumbsTotalCount));
         mRangeSeekBarView = new RangeSeekBarView(mContext, mLeftProgressPos, mRightProgressPos);
         mRangeSeekBarView.setSelectedMinValue(mLeftProgressPos);
         mRangeSeekBarView.setSelectedMaxValue(mRightProgressPos);

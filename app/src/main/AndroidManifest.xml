@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".VideoTrimmerActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".video.VideoTrimmerActivity" android:screenOrientation="portrait"></activity>
 
         <activity android:name=".photo.PhotoMerge2Activity" />
         <activity android:name=".photo.PhotoMergeActivity" />

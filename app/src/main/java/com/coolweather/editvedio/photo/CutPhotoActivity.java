@@ -19,31 +19,31 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.coolweather.editvedio.BaseActivity;
 import com.coolweather.editvedio.R;
+import com.itheima.library.PhotoView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CutPhotoActivity extends AppCompatActivity implements View.OnClickListener{
+public class CutPhotoActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CROP = 1;// 裁剪
     private static final int SCAN_OPEN_PHONE = 2;// 相册
     private static final int REQUEST_PERMISSION = 100;
-    private ImageView img;
+    private PhotoView img;
     private Uri mCutUri;// 图片裁剪时返回的uri
     private boolean hasPermission = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initUI() {
         setContentView(R.layout.activity_cut_photo);
-
         findViewById(R.id.btn_open_photo_album).setOnClickListener(this);
         findViewById(R.id.btn_result).setOnClickListener(this);
         img = findViewById(R.id.iv);
-
+        img.enable();
         checkPermissions();
     }
 
@@ -163,19 +163,4 @@ public class CutPhotoActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    // 从file中获取uri
-    // 7.0及以上使用的uri是contentProvider content://com.rain.takephotodemo.FileProvider/images/photo_20180824173621.jpg
-    // 6.0使用的uri为file:///storage/emulated/0/take_photo/photo_20180824171132.jpg
-    private static Uri getUriForFile(Context context, File file) {
-        if (context == null || file == null) {
-            throw new NullPointerException();
-        }
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.rain.takephotodemo.FileProvider", file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
-        return uri;
-    }
 }

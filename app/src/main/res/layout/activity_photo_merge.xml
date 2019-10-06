@@ -23,13 +23,13 @@
             android:text="选第二张图"
             android:id="@+id/bt_choose_2"/>
     </LinearLayout>
-    <ImageView
+    <com.itheima.library.PhotoView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:src="@drawable/photo1"
         android:id="@+id/photo_1"/>
-    <ImageView
+    <com.itheima.library.PhotoView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

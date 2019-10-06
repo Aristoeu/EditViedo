@@ -1,6 +1,5 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.video;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
@@ -10,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.coolweather.editvedio.BaseActivity;
+import com.coolweather.editvedio.R;
 import com.coolweather.editvedio.databinding.ActivityVideoTrimBinding;
 import com.coolweather.editvedio.interfaces.VideoTrimListener;
 import com.coolweather.editvedio.utils.ToastUtil;

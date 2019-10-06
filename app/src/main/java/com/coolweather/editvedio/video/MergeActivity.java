@@ -1,22 +1,18 @@
 package com.coolweather.editvedio.video;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.coolweather.editvedio.BaseActivity;
 import com.coolweather.editvedio.R;
 import com.coolweather.editvedio.utils.StorageUtil;
-import com.coolweather.editvedio.utils.ToastUtil;
 import com.coolweather.editvedio.utils.UIThreadUtil;
 import com.coolweather.editvedio.utils.UriUtils;
 
@@ -30,31 +26,27 @@ import VideoHandle.EpEditor;
 import VideoHandle.EpVideo;
 import VideoHandle.OnEditorListener;
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
-import nl.bravobit.ffmpeg.FFcommandExecuteResponseHandler;
 import nl.bravobit.ffmpeg.FFmpeg;
 
-public class MergeActivity extends AppCompatActivity implements View.OnClickListener {
+public class MergeActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int CHOOSE_FILE = 11;
     private TextView tv_add;
-    private Button bt_add, bt_merge, bt_glide, bt_merge_normal;
+    private Button bt_add, bt_merge, bt_glide, bt_merge_normal,bt_glide_normal;
     private List<EpVideo> videoList;
     private ProgressDialog mProgressDialog;
+    private boolean isGlideByLc = false;
+    private String[] outputFiles = new String[4];
+    private int step = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initUI() {
         setContentView(R.layout.activity_merge);
-        initView();
-        //videoList.add("/storage/emulated/0/DCIM/Camera/5.mp4");
-        //videoList.add("/storage/emulated/0/DCIM/Camera/6.mp4");
-    }
-
-    private void initView() {
         tv_add =  findViewById(R.id.tv_add);
         bt_add = findViewById(R.id.bt_add);
         bt_merge = findViewById(R.id.bt_merge);
         bt_glide = findViewById(R.id.bt_glide);
+        bt_glide_normal = findViewById(R.id.bt_glide_normal);
         bt_merge_normal = findViewById(R.id.bt_merge_normal);
         videoList = new ArrayList<>();
         mProgressDialog = new ProgressDialog(this);
@@ -67,6 +59,7 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
         bt_merge.setOnClickListener(this);
         bt_glide.setOnClickListener(this);
         bt_merge_normal.setOnClickListener(this);
+        bt_glide_normal.setOnClickListener(this);
     }
 
     @Override
@@ -79,10 +72,16 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 mergeVideo(true,true);
                 break;
             case R.id.bt_glide:
-                merge2();
+                isGlideByLc = true;
+                mergeWithGlide();
                 break;
             case R.id.bt_merge_normal:
                 mergeVideo(false,true);
+                break;
+            case R.id.bt_glide_normal:
+                isGlideByLc = false;
+                mergeWithGlide();
+                break;
         }
     }
 
@@ -110,6 +109,7 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 }
         }
     }
+
     final String outPath = Environment.getExternalStorageDirectory() + "/outmerge.mp4";
     OnEditorListener onEditorListener = new OnEditorListener() {
         @Override
@@ -148,20 +148,20 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
                 List<EpVideo> epVideoList = new ArrayList<>();
                 epVideoList.add(new EpVideo(outputFiles[2]));
                 epVideoList.add(new EpVideo(outputFiles[3]));
-                EpEditor.mergeByLc(this,epVideoList,new EpEditor.OutputOption(outPath),onEditorListener);
+                if (isGlideByLc)EpEditor.mergeByLc(this,epVideoList,new EpEditor.OutputOption(outPath),onEditorListener);
+                else EpEditor.merge(epVideoList,new EpEditor.OutputOption(outPath),onEditorListener);
             }
         } else {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "请至少添加两个视频哦", Toast.LENGTH_SHORT).show());
         }
     }
-    private String[] outputFiles = new String[4];
-    private int step = 0;
-    private void merge2() {
+
+    private void mergeWithGlide() {
        if (videoList.size() > 1) {
 
            for (int i = 0;i<4;i++)outputFiles[i] = "";
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "转场合并默认只处理前两个视频哦", Toast.LENGTH_SHORT).show());
-            //默认用list(0)反转，得到process1,再glide in 0:50，得到process2,再反转，得到process3，将list(1) glide in 0:50,得到process4，
+            // 默认用list(0)反转，得到process1,再glide in 0:50，得到process2,再反转，得到process3，将list(1) glide in 0:50,得到process4，
             // 然后拼接process3和process4，得到transition.mp4并打开
            step = 0;
            process(videoList.get(0).getVideoPath(),nameVideo(step)," -vf reverse ");
@@ -170,10 +170,10 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "请至少添加两个视频哦", Toast.LENGTH_SHORT).show());
         }
     }
+
     ExecuteBinaryResponseHandler executeBinaryResponseHandler = new ExecuteBinaryResponseHandler() {
         int cnt = 0;
         @Override public void onSuccess(String s) {
-            //if (step==3)mProgressDialog.dismiss();
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show());
             step++;
             switch (step){
@@ -198,25 +198,17 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onFinish() {
-            //if (step==3)mProgressDialog.dismiss();
-            //Log.d("<<<>>>","finish");
         }
 
         @Override
         public void onProgress(String message) {
             int s = step+1;
             mProgressDialog.setTitle("正在进行第"+s+"步，进度:"+cnt++);
-            //Log.d("<<<>>>","progress");
-            //UIThreadUtil.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "process", Toast.LENGTH_SHORT).show());
         }
     };
+
     private void process(String beginPath,String afterPath,String execCommand) {
         String cmd = "-i "+beginPath+execCommand+afterPath;
-        //Log.d("<<<>>>","inputfile: "+inputFile+"  outputfile: "+outputFile);
-        //String cmd = "-ss " + start + " -t " + duration + " -accurate_seek" + " -i " + inputFile + " -codec copy -avoid_negative_ts 1 " + outputFile;
-        //String cmd = "-ss " + start + " -i " + inputFile + " -ss " + start + " -t " + duration + " -vcodec copy " + outputFile;
-        //{"ffmpeg", "-ss", "" + startTime, "-y", "-i", inputFile, "-t", "" + induration, "-vcodec", "mpeg4", "-b:v", "2097152", "-b:a", "48000", "-ac", "2", "-ar", "22050", outputFile}
-        //String cmd = "-ss " + start + " -y " + "-i " + inputFile + " -t " + duration + " -vcodec " + "mpeg4 " + "-b:v " + "2097152 " + "-b:a " + "48000 " + "-ac " + "2 " + "-ar " + "22050 "+ outputFile;
         String[] command = cmd.split(" ");
         try {
             FFmpeg.getInstance(getApplicationContext()).execute(command, executeBinaryResponseHandler);
@@ -236,52 +228,3 @@ public class MergeActivity extends AppCompatActivity implements View.OnClickList
 }
 
 
-
-//String command ="-i /storage/emulated/0/outmerge.mp4 \"fade=in:5:8\" "+outputFile;
-//String command = "-ss " + "00:00:01" + " -t " + "00:00:11" + " -accurate_seek" + " -i " + "/storage/emulated/0/outmerge.mp4" + " -codec copy -avoid_negative_ts 1 " + outputFile;
-    /*        String command = "-i "+"/storage/emulated/0/outmerge.mp4"+" -vf reverse "+outputFile;
-
-            //UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, videoList.get(0).getVideoPath(), Toast.LENGTH_SHORT).show());
-
-            mProgressDialog.setProgress(0);
-            mProgressDialog.show();
-
-            String[] cmd = command.split(" ");
-            //cnt = 0;
-
-            FFmpeg.getInstance(this).execute(cmd, new ExecuteBinaryResponseHandler() {
-                @Override
-                public void onSuccess(String message) {
-                    //Log.d("<<<>>>","success");
-                    mProgressDialog.dismiss();
-                    UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "success", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onProgress(String message) {
-                    //Log.d("<<<>>>","progress");
-                    //cnt++;
-                    //if (cnt%10==0)
-                    UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "progress" Toast.LENGTH_SHORT).show());
-                    //mProgressDialog.setTitle(cnt+"");
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    // Log.d("<<<>>>","failed");
-                    mProgressDialog.dismiss();
-                    UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "failed", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onStart() {
-                    // Log.d("<<<>>>","start");
-                    UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "start", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onFinish() {
-                    // Log.d("<<<>>>","finish");
-                    UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "finish", Toast.LENGTH_SHORT).show());
-                }
-            });*/

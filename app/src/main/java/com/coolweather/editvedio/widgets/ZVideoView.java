@@ -1,4 +1,4 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.widgets;
 
 import android.content.Context;
 import android.media.MediaMetadataRetriever;

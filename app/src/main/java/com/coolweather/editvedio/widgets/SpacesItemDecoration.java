@@ -1,16 +1,16 @@
-package com.coolweather.editvedio;
+package com.coolweather.editvedio.widgets;
 
 import android.graphics.Rect;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SpacesItemDecoration2 extends RecyclerView.ItemDecoration{
+public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
 
     private int space;
     private int thumbnailsCount;
 
-    public SpacesItemDecoration2(int space, int thumbnailsCount) {
+    public SpacesItemDecoration(int space, int thumbnailsCount) {
         this.space = space;
         this.thumbnailsCount = thumbnailsCount;
     }

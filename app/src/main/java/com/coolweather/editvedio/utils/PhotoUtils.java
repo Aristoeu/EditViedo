@@ -10,6 +10,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class PhotoUtils {
     public static Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight) {
@@ -81,5 +82,17 @@ public class PhotoUtils {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+    public static Bitmap drawMulti(List<Bitmap> bitmaps, boolean isX) {
+        if (bitmaps.size()==1)return bitmaps.get(0);
+        Bitmap res = null;
+        for (Bitmap bitmap : bitmaps){
+            if (isX)
+                res = newXBitmap(res,bitmap);
+            else res = newYBitmap(res,bitmap);
+        }
+        if (res!=null)
+            saveBitmapFile(res);
+        return res;
     }
 }

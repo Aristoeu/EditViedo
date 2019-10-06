@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/layout1"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="80dp">
 
@@ -36,8 +37,14 @@
             android:layout_weight="1"
             android:layout_margin="5dp"
             android:text="无损合并"/>
-        
 
+        <Button
+            android:id="@+id/bt_merge_normal"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="万能合并"/>
 
     </LinearLayout>
     <LinearLayout
@@ -48,27 +55,24 @@
         android:layout_marginBottom="40dp">
 
         <Button
-            android:id="@+id/bt_merge_normal"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:text="万能合并"/>
-
-
+            android:text="转场合并（无损）"
+            android:id="@+id/bt_glide"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_margin="5dp"
-            android:text="转场合并"
-            android:id="@+id/bt_glide"/>
-
+            android:text="转场合并（万能）"
+            android:id="@+id/bt_glide_normal"/>
     </LinearLayout>
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="无损合并速度快，但要求两个视频格式相同，不然可能出现乱码，万能合并对格式没有要求，但是会降低清晰度而且速度慢"
     android:layout_margin="3dp"
-    android:layout_alignParentBottom="true"/>
+    android:layout_above="@id/layout1"/>
 </RelativeLayout>

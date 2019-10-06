@@ -11,37 +11,15 @@ import com.coolweather.editvedio.photo.PhotoMergeActivity;
 import com.coolweather.editvedio.video.EditActivity;
 import com.coolweather.editvedio.video.MergeActivity;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initUI() {
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.bt_one).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, EditActivity.class));
-            }
-        });
-        findViewById(R.id.bt_more).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MergeActivity.class));
-            }
-        });
-        findViewById(R.id.bt_cut_photo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CutPhotoActivity.class));
-            }
-        });
-        findViewById(R.id.bt_merge_photo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PhotoMergeActivity.class));
-            }
-        });
+        findViewById(R.id.bt_one).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, EditActivity.class)));
+        findViewById(R.id.bt_more).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MergeActivity.class)));
+        findViewById(R.id.bt_cut_photo).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, CutPhotoActivity.class)));
+        findViewById(R.id.bt_merge_photo).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, PhotoMergeActivity.class)));
     }
 }
