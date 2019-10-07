@@ -6,7 +6,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.coolweather.editvedio.interfaces.VideoTrimListener;
+import com.coolweather.editvedio.videoTrimmer.VideoTrimListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

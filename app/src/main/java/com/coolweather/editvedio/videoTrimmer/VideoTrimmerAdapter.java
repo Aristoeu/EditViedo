@@ -1,4 +1,4 @@
-package com.coolweather.editvedio.video;
+package com.coolweather.editvedio.videoTrimmer;
 
 import android.content.Context;
 import android.graphics.Bitmap;

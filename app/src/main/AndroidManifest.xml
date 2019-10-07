@@ -16,13 +16,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".video.VideoTrimmerActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".videoTrimmer.VideoTrimmerActivity" android:screenOrientation="portrait"></activity>
 
         <activity android:name=".photo.PhotoMerge2Activity" />
         <activity android:name=".photo.PhotoMergeActivity" />
         <activity android:name=".photo.CutPhotoActivity" />
-        <activity android:name=".video.MergeActivity" />
-        <activity android:name=".video.EditActivity" />
+        <activity android:name=".videoMerge.MergeActivity" />
+        <activity android:name=".videoEdit.EditActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

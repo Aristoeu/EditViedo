@@ -1,4 +1,4 @@
-package com.coolweather.editvedio.video;
+package com.coolweather.editvedio.videoMerge;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,71 +28,63 @@ import VideoHandle.OnEditorListener;
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
 import nl.bravobit.ffmpeg.FFmpeg;
 
-public class MergeActivity extends BaseActivity implements View.OnClickListener {
+public class MergeActivity extends BaseActivity implements View.OnClickListener,VideoMergeContract.VideoMergeView {
 
     private static final int CHOOSE_FILE = 11;
     private TextView tv_add;
-    private Button bt_add, bt_merge, bt_glide, bt_merge_normal,bt_glide_normal;
-    private List<EpVideo> videoList;
     private ProgressDialog mProgressDialog;
-    private boolean isGlideByLc = false;
-    private String[] outputFiles = new String[4];
-    private int step = 0;
+    private VideoMergePresenter presenter;
 
     @Override
     protected void initUI() {
         setContentView(R.layout.activity_merge);
         tv_add =  findViewById(R.id.tv_add);
-        bt_add = findViewById(R.id.bt_add);
-        bt_merge = findViewById(R.id.bt_merge);
-        bt_glide = findViewById(R.id.bt_glide);
-        bt_glide_normal = findViewById(R.id.bt_glide_normal);
-        bt_merge_normal = findViewById(R.id.bt_merge_normal);
-        videoList = new ArrayList<>();
+        initProgressDialog();
+        findViewById(R.id.bt_add).setOnClickListener(this);
+        findViewById(R.id.bt_merge).setOnClickListener(this);
+        findViewById(R.id.bt_glide).setOnClickListener(this);
+        findViewById(R.id.bt_merge_normal).setOnClickListener(this);
+        findViewById(R.id.bt_glide_normal).setOnClickListener(this);
+        presenter = new VideoMergePresenter(this,MergeActivity.this);
+    }
+
+    @Override
+    public void initProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setMax(100);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setTitle("正在处理");
-        bt_add.setOnClickListener(this);
-        bt_merge.setOnClickListener(this);
-        bt_glide.setOnClickListener(this);
-        bt_merge_normal.setOnClickListener(this);
-        bt_glide_normal.setOnClickListener(this);
+        mProgressDialog.setProgress(0);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add:
-                chooseFile();
+                presenter.chooseFile();
                 break;
             case R.id.bt_merge:
-                mergeVideo(true,true);
+                presenter.mergeVideo(true,true);
                 break;
             case R.id.bt_glide:
-                isGlideByLc = true;
-                mergeWithGlide();
+                presenter.setGlideByLc(true);
+                presenter.mergeWithGlide();
                 break;
             case R.id.bt_merge_normal:
-                mergeVideo(false,true);
+                presenter.mergeVideo(false,true);
                 break;
             case R.id.bt_glide_normal:
-                isGlideByLc = false;
-                mergeWithGlide();
+                presenter.setGlideByLc(false);
+                presenter.mergeWithGlide();
                 break;
         }
     }
 
-    /**
-     * 选择文件
-     */
-    private void chooseFile() {
-        Intent intent = new Intent();
-        intent.setType("video/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+    @Override
+    public void startVideo(Intent intent) {
         startActivityForResult(intent, CHOOSE_FILE);
     }
 
@@ -104,43 +96,95 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
                 if (resultCode == RESULT_OK) {
                     String videoUrl = UriUtils.getPath(MergeActivity.this, data.getData());
                     tv_add.setText(tv_add.getText() + videoUrl + "\n");
-                    videoList.add(new EpVideo(videoUrl));
+                    presenter.addToVideoList(videoUrl);
                     break;
                 }
         }
     }
 
-    final String outPath = Environment.getExternalStorageDirectory() + "/outmerge.mp4";
-    OnEditorListener onEditorListener = new OnEditorListener() {
+    @Override
+    public void UpdateProgressDialog(float v) {
+        mProgressDialog.setProgress((int) (v * 100));
+    }
+
+    @Override
+    public void playVideo(String outPath) {
+        Intent v = new Intent(Intent.ACTION_VIEW);
+        v.setDataAndType(Uri.parse(outPath), "video/mp4");
+        startActivity(v);
+    }
+
+
+
+    @Override
+    public void showDialogue(int i) {
+        mProgressDialog.setProgress(i);
+        mProgressDialog.show();
+    }
+
+
+    @Override
+    public void setTextProgress(int s, int cnt) {
+        mProgressDialog.setTitle("正在进行第"+s+"步，进度:"+cnt);
+    }
+    @Override
+    public void dissmissProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
+
+}
+
+//下面的代码重构完都不要了
+// private List<EpVideo> videoList;
+// private boolean isGlideByLc = false;
+// private String[] outputFiles = new String[4];
+// private int step = 0;
+// final String outPath = Environment.getExternalStorageDirectory() + "/outmerge.mp4";
+
+
+/*
+ * 选择文件
+ */
+  /*  private void chooseFile() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startVideo(intent);
+    }*/
+/*   private void addToVideoList(String videoUrl) {
+        videoList.add(new EpVideo(videoUrl));
+    }*/
+
+  /*  OnEditorListener onEditorListener = new OnEditorListener() {
         @Override
         public void onSuccess() {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "success", Toast.LENGTH_SHORT).show());
-            mProgressDialog.dismiss();
+            dissmissProgressDialog();
 
-            Intent v = new Intent(Intent.ACTION_VIEW);
-            v.setDataAndType(Uri.parse(outPath), "video/mp4");
-            startActivity(v);
+            playVideo(outPath);
         }
 
         @Override
         public void onFailure() {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "failed", Toast.LENGTH_SHORT).show());
-            mProgressDialog.dismiss();
+            dissmissProgressDialog();
         }
 
         @Override
         public void onProgress(float v) {
-            mProgressDialog.setProgress((int) (v * 100));
+            UpdateProgressDialog(v);
         }
 
     };
-    /**
-     * 合并视频
-     */
-    private void mergeVideo(boolean isByLc,boolean isUsingList) {
+*/
+/*
+ * 合并视频
+ */
+   /* private void mergeVideo(boolean isByLc,boolean isUsingList) {
         if (videoList.size() > 1) {
-            mProgressDialog.setProgress(0);
-            mProgressDialog.show();
+            showDialogue(0);
             if (isByLc && isUsingList)
             EpEditor.mergeByLc(this,videoList, new EpEditor.OutputOption(outPath), onEditorListener);
             else if (isUsingList)EpEditor.merge(videoList,new EpEditor.OutputOption(outPath),onEditorListener);
@@ -154,9 +198,8 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
         } else {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "请至少添加两个视频哦", Toast.LENGTH_SHORT).show());
         }
-    }
-
-    private void mergeWithGlide() {
+    }*/
+   /* private void mergeWithGlide() {
        if (videoList.size() > 1) {
 
            for (int i = 0;i<4;i++)outputFiles[i] = "";
@@ -169,9 +212,9 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
        }else {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(MergeActivity.this, "请至少添加两个视频哦", Toast.LENGTH_SHORT).show());
         }
-    }
+    }*/
 
-    ExecuteBinaryResponseHandler executeBinaryResponseHandler = new ExecuteBinaryResponseHandler() {
+    /*ExecuteBinaryResponseHandler executeBinaryResponseHandler = new ExecuteBinaryResponseHandler() {
         int cnt = 0;
         @Override public void onSuccess(String s) {
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show());
@@ -185,13 +228,12 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
         }
 
         @Override public void onStart() {
-            mProgressDialog.setProgress(50);
-            mProgressDialog.show();
+            showDialogue(50);
         }
 
         @Override
         public void onFailure(String message) {
-            mProgressDialog.dismiss();
+            dissmissProgressDialog();
             UIThreadUtil.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show());
             Log.d("<<<>>>","failed");
         }
@@ -203,11 +245,13 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
         @Override
         public void onProgress(String message) {
             int s = step+1;
-            mProgressDialog.setTitle("正在进行第"+s+"步，进度:"+cnt++);
+            cnt++;
+            setTextProgress(s,cnt);
         }
-    };
 
-    private void process(String beginPath,String afterPath,String execCommand) {
+    };
+    */
+  /*  private void process(String beginPath,String afterPath,String execCommand) {
         String cmd = "-i "+beginPath+execCommand+afterPath;
         String[] command = cmd.split(" ");
         try {
@@ -215,16 +259,13 @@ public class MergeActivity extends BaseActivity implements View.OnClickListener 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private String nameVideo(int i) {
+  /*  private String nameVideo(int i) {
         if (!outputFiles[i].equals(""))return outputFiles[i];
         final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         final String outputName =  timeStamp + ".mp4";
 
         outputFiles[i] = StorageUtil.getCacheDir() + "/" + outputName;
         return outputFiles[i];
-    }
-}
-
-
+    }*/

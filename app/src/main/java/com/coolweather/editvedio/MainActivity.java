@@ -1,15 +1,11 @@
 package com.coolweather.editvedio;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import com.coolweather.editvedio.photo.CutPhotoActivity;
 import com.coolweather.editvedio.photo.PhotoMergeActivity;
-import com.coolweather.editvedio.video.EditActivity;
-import com.coolweather.editvedio.video.MergeActivity;
+import com.coolweather.editvedio.videoEdit.EditActivity;
+import com.coolweather.editvedio.videoMerge.MergeActivity;
 
 public class MainActivity extends BaseActivity {
 

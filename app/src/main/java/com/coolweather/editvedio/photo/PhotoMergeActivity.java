@@ -34,7 +34,7 @@ import io.reactivex.functions.Consumer;
 import static com.coolweather.editvedio.utils.PhotoUtils.*;
 
 //不删了
-public class PhotoMergeActivity extends BaseActivity {
+public class PhotoMergeActivity extends BaseActivity implements PhotoEditContract.PhotoMergeView {
     private Bitmap bitmap1 = null,bitmap2 = null;
     private PhotoView imageView1,imageView2;
 
@@ -52,7 +52,8 @@ public class PhotoMergeActivity extends BaseActivity {
         findViewById(R.id.bt_merge_more).setOnClickListener(view -> startActivity(new Intent(PhotoMergeActivity.this, PhotoMerge2Activity.class)));
     }
 
-    private void setMergedPhoto(boolean isX) {
+    @Override
+    public void setMergedPhoto(boolean isX) {
         if (bitmap1 != null && bitmap2 != null) {
             bitmap1 = isX ? newXBitmap(bitmap1, bitmap2) : newYBitmap(bitmap1,bitmap2);
             saveBitmapFile(bitmap1);
@@ -60,7 +61,8 @@ public class PhotoMergeActivity extends BaseActivity {
         }
     }
 
-    private void checkPermissions(int i) {
+    @Override
+    public void checkPermissions(int i) {
         if (ContextCompat.checkSelfPermission(PhotoMergeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(PhotoMergeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, i);
         } else {
@@ -88,7 +90,9 @@ public class PhotoMergeActivity extends BaseActivity {
             default:
         }
     }
-    private void openAlbum(int n) {
+
+    @Override
+    public void openAlbum(int n) {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
         startActivityForResult(intent,n); // 打开相册
@@ -111,7 +115,8 @@ public class PhotoMergeActivity extends BaseActivity {
         }
     }
 
-    private void displayImage(String imagePath,int n) {
+    @Override
+    public void displayImage(String imagePath, int n) {
         if (imagePath != null) {
             switch (n){
                 case 1:

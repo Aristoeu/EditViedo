@@ -1,4 +1,4 @@
-package com.coolweather.editvedio.video;
+package com.coolweather.editvedio.videoTrimmer;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import com.coolweather.editvedio.BaseActivity;
 import com.coolweather.editvedio.R;
 import com.coolweather.editvedio.databinding.ActivityVideoTrimBinding;
-import com.coolweather.editvedio.interfaces.VideoTrimListener;
 import com.coolweather.editvedio.utils.ToastUtil;
 
 public class VideoTrimmerActivity extends BaseActivity implements VideoTrimListener {

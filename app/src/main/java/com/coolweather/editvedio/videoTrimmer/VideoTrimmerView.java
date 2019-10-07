@@ -1,4 +1,4 @@
-package com.coolweather.editvedio.video;
+package com.coolweather.editvedio.videoTrimmer;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.coolweather.editvedio.R;
-import com.coolweather.editvedio.interfaces.IVideoTrimmerView;
-import com.coolweather.editvedio.interfaces.VideoTrimListener;
 import com.coolweather.editvedio.utils.StorageUtil;
 import com.coolweather.editvedio.utils.VideoTrimmerUtil;
 import com.coolweather.editvedio.widgets.RangeSeekBarView;
